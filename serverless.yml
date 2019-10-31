@@ -19,6 +19,11 @@ service: triv-redir
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
+custom:
+  webpackIncludeModules:
+    forceExclude:
+      - aws-sdk
+      - chalk
 
 plugins:
   - serverless-webpack
@@ -26,6 +31,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs10.x
+  timeout: 30
   region: us-east-1
   vpc:
     securityGroupIds:
@@ -35,11 +41,9 @@ provider:
       - subnet-4439fc19
 
 package: # Optional deployment packaging configuration
+  excludeDevDependencies: true # Config if Serverless should automatically exclude dev dependencies in the deployment package. Defaults to true
   include: # Specify the directories and files which should be included in the deployment package
     - dist/**
-
-  excludeDevDependencies: true # Config if Serverless should automatically exclude dev dependencies in the deployment package. Defaults to true
-
 
 # you can overwrite defaults here
 #  stage: dev
@@ -75,11 +79,11 @@ package: # Optional deployment packaging configuration
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: dist/handler.entry
+  triv:
+    handler: dist/lambda_entry.entry
     events:
       - http:
-          path: "cebe2/{proxy+}"
+          path: "/coder/{proxy+}"
           method: get
 
 

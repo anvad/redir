@@ -3,7 +3,8 @@ import { log } from "./utils";
 
 export const sayHello = (req: Request, res: Response) => {
     const name = req.params["name"];
-    res.end(`hello there ${name}!`);
+    log(`sayHello called with name: ${name}`);
+    res.send(200, `hello there ${name}!`);
 }
 
 export const redir = (req: Request, res: Response, next: Next) => {
